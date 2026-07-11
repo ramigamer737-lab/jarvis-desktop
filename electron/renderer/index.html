@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>JARVIS — Command Center</title>
+<script>
+// Electron IPC bridge — injected by JARVIS desktop wrapper
+window.JARVIS_DESKTOP = true;
+window.JARVIS_API_BASE = "http://127.0.0.1:8000";
+if (window.electronAPI) {
+  window.electronAPI.onBackendStatus(function(status) {
+    var el = document.getElementById("backend-status-badge");
+    if (el) {
+      el.textContent = status === "online" ? "● Backend Online" : "● Backend Offline";
+      el.style.color = status === "online" ? "#22d3a0" : "#ef4444";
+    }
+  });
+}
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #060610;
+    color: #e0e0e0;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .logo {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, #00e5ff 0%, #0070a0 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px #00e5ff44;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 40px #00e5ff44; }
+    50% { box-shadow: 0 0 80px #00e5ff88; }
+  }
+  h1 { color: #00e5ff; font-size: 2.5rem; font-weight: 700; letter-spacing: 0.1em; }
+  .subtitle { color: #666; font-size: 1rem; }
+  #backend-status-badge {
+    font-size: 0.9rem;
+    color: #ef4444;
+    padding: 0.4rem 1rem;
+    border: 1px solid #333;
+    border-radius: 20px;
+    background: #0a0a14;
+  }
+  .actions { display: flex; gap: 1rem; margin-top: 1rem; }
+  .btn {
+    padding: 0.6rem 1.5rem;
+    border: 1px solid #00e5ff44;
+    border-radius: 8px;
+    background: #0a0a14;
+    color: #00e5ff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: #00e5ff22; border-color: #00e5ff; }
+  .note { font-size: 0.75rem; color: #444; text-align: center; max-width: 400px; line-height: 1.6; }
+  a { color: #00e5ff; }
+</style>
+</head>
+<body>
+  <div class="logo"></div>
+  <h1>JARVIS</h1>
+  <div class="subtitle">AI PC Assistant — Desktop v1.0.0</div>
+  <div id="backend-status-badge">● Connecting to backend...</div>
+  <div class="actions">
+    <button class="btn" onclick="openDocs()">📖 API Docs</button>
+    <button class="btn" onclick="restartBackend()">🔄 Restart Backend</button>
+  </div>
+  <div class="note">
+    The full JARVIS Dashboard v2 (Phase 28) is included in the ZIP package.<br/>
+    Download from the <a href="https://github.com/ramigamer737-lab/jarvis-desktop/releases" target="_blank">releases page</a>
+    or view the <a href="https://static.teamily.ai/sites/a3cd5f43-0082-4cb5-8993-c5046d6ccd3f/webpages/jarvis-dashboard-v3/index.html" target="_blank">live dashboard</a>.
+  </div>
+  <script>
+    function openDocs() {
+      if (window.electronAPI) {
+        window.electronAPI.getBackendUrl().then(url => {
+          window.open(url + '/docs', '_blank');
+        });
+      } else {
+        window.open('http://localhost:8000/docs', '_blank');
+      }
+    }
+    function restartBackend() {
+      if (window.electronAPI) {
+        window.electronAPI.restartBackend().then(() => {
+          document.getElementById('backend-status-badge').textContent = '● Restarting...';
+        });
+      }
+    }
+    // Poll backend status every 3s
+    async function checkBackend() {
+      const badge = document.getElementById('backend-status-badge');
+      try {
+        const url = window.electronAPI ? await window.electronAPI.getBackendUrl() : 'http://localhost:8000';
+        const resp = await fetch(url + '/health', { signal: AbortSignal.timeout(2000) });
+        if (resp.ok) {
+          badge.textContent = '● Backend Online';
+          badge.style.color = '#22d3a0';
+        } else {
+          badge.textContent = '● Backend Error';
+          badge.style.color = '#f59e0b';
+        }
+      } catch {
+        badge.textContent = '● Backend Offline';
+        badge.style.color = '#ef4444';
+      }
+    }
+    checkBackend();
+    setInterval(checkBackend, 3000);
+  </script>
+</body>
+</html>
