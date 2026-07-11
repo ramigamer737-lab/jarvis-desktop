@@ -1,0 +1,54 @@
+# JARVIS Desktop Configuration
+# All values can be overridden with environment variables.
+
+jarvis:
+  name: "JARVIS"
+  version: "1.0.0"
+
+# LLM provider settings
+llm:
+  default_provider: openai   # openai | anthropic | ollama | mock
+
+  openai:
+    api_key: ""              # or set OPENAI_API_KEY env var
+    model: gpt-4o
+    temperature: 0.1
+    max_tokens: 4096
+    timeout: 60
+
+  anthropic:
+    api_key: ""              # or set ANTHROPIC_API_KEY env var
+    model: claude-3-5-sonnet-20241022
+    temperature: 0.1
+    max_tokens: 4096
+    timeout: 60
+
+  ollama:
+    base_url: http://localhost:11434
+    model: llama3
+    temperature: 0.1
+    max_tokens: 4096
+    timeout: 120
+
+  mock:
+    model: mock-1
+
+# Agent settings
+agent:
+  base_url: http://localhost:8000
+  timeout: 30
+  max_retries: 3
+  confirmation_timeout: 60
+  high_risk_tools:
+    - terminal_execute
+    - terminal_execute_powershell
+    - terminal_execute_python
+    - usb_eject
+    - file_delete
+    - process_kill
+    - system_power
+
+# Cost limits
+cost:
+  warn_usd: 1.0
+  hard_limit_usd: 10.0
