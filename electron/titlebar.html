@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    height: 38px;
+    background: #0a0a14;
+    border-bottom: 1px solid #1a1a2e;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    -webkit-app-region: drag;
+    user-select: none;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+  }
+
+  .left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 14px;
+  }
+
+  .logo {
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #00e5ff 0%, #0070a0 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 8px #00e5ff66;
+  }
+
+  .title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e0;
+    letter-spacing: 0.05em;
+  }
+
+  .title span {
+    color: #00e5ff;
+    font-family: 'Orbitron', monospace;
+  }
+
+  .status {
+    font-size: 11px;
+    color: #666;
+    margin-left: 6px;
+  }
+
+  .status.online  { color: #22d3a0; }
+  .status.offline { color: #ef4444; }
+
+  .controls {
+    display: flex;
+    -webkit-app-region: no-drag;
+  }
+
+  .btn {
+    width: 46px;
+    height: 38px;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .btn:hover          { background: #1e1e2e; color: #ccc; }
+  .btn.close:hover    { background: #c0392b; color: #fff; }
+  .btn.maximize:hover { background: #1e1e2e; color: #00e5ff; }
+</style>
+</head>
+<body>
+  <div class="left">
+    <div class="logo"></div>
+    <div class="title"><span>JARVIS</span> AI Assistant</div>
+    <div class="status offline" id="status-dot">● Connecting...</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn minimize" onclick="minimize()" title="Minimize">&#x2212;</button>
+    <button class="btn maximize" onclick="maximize()" title="Maximize/Restore">&#x25A1;</button>
+    <button class="btn close"   onclick="closeWin()" title="Close">&#x2715;</button>
+  </div>
+
+  <script>
+    function minimize() { window.electronAPI?.minimizeWindow(); }
+    function maximize() { window.electronAPI?.maximizeWindow(); }
+    function closeWin() { window.electronAPI?.closeWindow(); }
+
+    async function checkStatus() {
+      const dot = document.getElementById('status-dot');
+      try {
+        const status = await window.electronAPI?.getBackendStatus();
+        if (status === 'online') {
+          dot.textContent = '● Online';
+          dot.className = 'status online';
+        } else {
+          dot.textContent = '● Offline';
+          dot.className = 'status offline';
+        }
+      } catch (_) {
+        dot.textContent = '● Offline';
+        dot.className = 'status offline';
+      }
+    }
+
+    if (window.electronAPI) {
+      checkStatus();
+      setInterval(checkStatus, 5000);
+      window.electronAPI.onBackendStatus(s => {
+        const dot = document.getElementById('status-dot');
+        dot.textContent = s === 'online' ? '● Online' : '● Offline';
+        dot.className = `status ${s}`;
+      });
+    }
+  </script>
+</body>
+</html>
