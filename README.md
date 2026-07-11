@@ -1,11 +1,12 @@
 # 🤖 JARVIS Desktop
 
-[![CI](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml/badge.svg)](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml) [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml/badge.svg)](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Electron](https://img.shields.io/badge/Electron-30-47848F?logo=electron&logoColor=white)](https://electronjs.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 
 **JARVIS AI PC Assistant** — Electron desktop app with FastAPI backend, ReAct agent, self-improvement engine, and real LLM integration.
-
-[![Electron](https://img.shields.io/badge/Electron-30-cyan)](https://electronjs.org)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green)](https://fastapi.tiangolo.com)
 
 ---
 
@@ -17,6 +18,7 @@
 - **Self-improvement engine** — JARVIS writes, tests, and registers new tools autonomously
 - **Electron desktop app** — frameless window, system tray, backend auto-start
 - **JARVIS Dashboard v2** — dark theme, particle background, 8 panels × 40 views
+- **GitHub Actions CI** — lint (ruff) + test (pytest) + build (Win/Mac/Linux) on every push
 
 ---
 
@@ -48,6 +50,7 @@ npm run build:linux  # → dist/JARVIS-1.0.0.AppImage
 
 ```
 jarvis-desktop/
+├── .github/workflows/ci.yml ← GitHub Actions CI
 ├── main.py                  ← FastAPI server (port 8000)
 ├── config.yaml              ← LLM + agent config
 ├── requirements.txt
@@ -90,6 +93,8 @@ jarvis-desktop/
 pip install pytest pytest-asyncio pytest-timeout
 pytest tests/ -v
 ```
+
+CI runs automatically on every push to `main` — see [Actions](https://github.com/ramigamer737-lab/jarvis-desktop/actions).
 
 ---
 
