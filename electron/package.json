@@ -1,0 +1,80 @@
+{
+  "name": "jarvis-desktop",
+  "version": "1.0.0",
+  "description": "JARVIS AI PC Assistant — Desktop App",
+  "main": "main.js",
+  "author": "JARVIS Project",
+  "license": "MIT",
+  "scripts": {
+    "start":       "electron .",
+    "dev":         "JARVIS_DEV=1 electron .",
+    "build":       "electron-builder",
+    "build:win":   "electron-builder --win",
+    "build:mac":   "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "pack":        "electron-builder --dir"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron":         "^30.0.0",
+    "electron-builder": "^24.13.0"
+  },
+  "build": {
+    "appId":       "ai.jarvis.desktop",
+    "productName": "JARVIS",
+    "copyright":   "Copyright © 2025 JARVIS Project",
+    "icon":        "assets/icon",
+    "files": [
+      "main.js",
+      "preload.js",
+      "titlebar.html",
+      "renderer/**/*",
+      "assets/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "../",
+        "to":   "backend",
+        "filter": [
+          "main.py",
+          "config.yaml",
+          "requirements.txt",
+          "autonomous_agent/**",
+          "self_improvement/**",
+          "jarvis/**",
+          "logs/.gitkeep",
+          "data/.gitkeep"
+        ]
+      }
+    ],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick":          false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName":      "JARVIS AI Assistant"
+    },
+    "mac": {
+      "target": [{ "target": "dmg", "arch": ["x64", "arm64"] }],
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "dmg": {
+      "title": "JARVIS ${version}",
+      "window": { "width": 540, "height": 380 }
+    },
+    "linux": {
+      "target": [{ "target": "AppImage", "arch": ["x64"] }],
+      "icon": "assets/icon.png",
+      "category": "Utility"
+    },
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    }
+  }
+}
