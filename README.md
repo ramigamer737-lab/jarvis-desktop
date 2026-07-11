@@ -1,11 +1,11 @@
 # 🤖 JARVIS Desktop
 
+[![CI](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml/badge.svg)](https://github.com/ramigamer737-lab/jarvis-desktop/actions/workflows/ci.yml) [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)](https://python.org) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **JARVIS AI PC Assistant** — Electron desktop app with FastAPI backend, ReAct agent, self-improvement engine, and real LLM integration.
 
-[![Python](https://img.shields.io/badge/Python-3.11+-blue)](https://python.org)
 [![Electron](https://img.shields.io/badge/Electron-30-cyan)](https://electronjs.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-green)](https://fastapi.tiangolo.com)
-[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
 ---
 
